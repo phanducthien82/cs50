@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Exchange Rate</title>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                document.querySelector('form').onsubmit = function() {
+
+                    // Lay thong tin tu APIs
+                    fetch('http://api.exchangeratesapi.io/v1/latest?access_key=f4757e1590e5dcc049badb76d86040a7')
+                    // Neu thanh cong thi chuyen doi du lieu thanh dang json
+                    .then(Response => Response.json())
+                    .then(data => {
+                        //console.log(data);
+                        // Lay du lieu nhap vao tu nguoi dung
+                        const currency = document.querySelector('#currency').value;                        
+                        const rate = data.rates[currency];
+                        // Neu du lieu tra ve khong phai la mot bien khong xac dinh thi in ra ket qua chuyen doi tien
+                        if (rate != undefined) {
+                            document.querySelector('#result').innerHTML = `1 EUR is equal to ${rate.toFixed(3)} ${currency}`;
+                        } else {
+                            document.querySelector('#result').innerHTML = 'Invaild currency';
+                        }                        
+                    })
+                    // Neu loi thi ghi thong bao o cua so console
+                    .catch(error => {
+                        console.log('Error: ', error);
+                    });            
+
+                    return false;
+                }
+                
+            });
+
+        </script>
+    </head>
+    <body>
+        <h1>Currency!</h1>
+        <form>
+            <input id="currency" placeholder="Curency" type="text">
+            <input type="submit" value="Convert">
+        </form>
+        <div id="result"></div>
+    </body>
+</html>
